@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cloud.dao.UserDao;
+import com.cloud.model.Password;
 import com.cloud.model.User;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,11 +52,6 @@ public class UserServiceImpl implements UserDetailsService {
 		System.out.println(userUpdate);
 		userUpdate.setFirstName(user.getFirstName());
 		userUpdate.setLastName(user.getLastName());
-		String userPassword = user.getUserPassword();
-		String decode = new String(Base64.getDecoder().decode(userPassword));
-		String password = BCrypt.hashpw(decode,BCrypt.gensalt());
-		System.out.println(password);
-		userUpdate.setUserPassword(password);
 		
 		User user1 = userDao.save(userUpdate);
 		System.out.println(user1);
@@ -93,6 +89,26 @@ public class UserServiceImpl implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getUserPassword(),
                 new ArrayList<>());
     }
+	
+	public User updatePassword(Password password) {
+		User user = userDao.findByUsername(password.getUserName());
+		
+		String oldPassword = password.getOldPassword();
+		String oldDbPassword = user.getUserPassword();
+		String decode = new String(Base64.getDecoder().decode(oldPassword));
+		boolean matchPassword = BCrypt.checkpw(decode, oldDbPassword);
+		
+		if(matchPassword==true) {
+			String newPassword = password.getNewPassword();
+			String decodeNew = new String(Base64.getDecoder().decode(newPassword));
+			String finalPassword = BCrypt.hashpw(decodeNew,BCrypt.gensalt());
+			user.setUserPassword(finalPassword);
+			User finalUser = userDao.save(user);
+			return finalUser;
+			
+		}
+		return null;
+	}
 }
 
 	
