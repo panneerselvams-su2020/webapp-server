@@ -17,7 +17,7 @@ import com.cloud.service.UserServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserServiceImpl jwtUserDetailsService;
 	@Autowired

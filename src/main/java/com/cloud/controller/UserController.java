@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloud.service.UserServiceImpl;
+import com.cloud.model.Password;
 import com.cloud.model.User;
 
 @RestController
@@ -56,6 +57,19 @@ public class UserController {
 		if(user == null) {
 			return ResponseEntity.badRequest().body(user);
 		}else {
+			return ResponseEntity.ok(user);
+		}
+	}
+	
+	@PutMapping("/updatePassword")
+	public ResponseEntity<User> update(@RequestBody Password passwordObj) {
+		
+		User user = userService.updatePassword(passwordObj);
+		
+		if(user == null) {
+			return ResponseEntity.badRequest().body(user);
+		}
+		else {
 			return ResponseEntity.ok(user);
 		}
 	}
