@@ -6,9 +6,8 @@ target/
 
 ### STS ###
 .apt_generated
-.classpath
+
 .factorypath
-.project
 .settings
 .springBeans
 .sts4-cache
@@ -39,8 +38,7 @@ build/
 /.mvn/**
 # BlueJ files
 *.ctxt
-*.classpath
-.project
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
