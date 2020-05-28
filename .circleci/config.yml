@@ -2,22 +2,33 @@ version: 2
 jobs:
   build:
     working_directory: ~/webapp-server
-      docker:
-        - image: circleci/openjdk:8-jdk-stretch
-      steps:
-        - checkout
-        - restore_cache:
-          key: webapp-server-{{ checksum "pom.xml" }}
-        - run: mvn dependency:go-offline
-        - save_cache:
-          paths:
-            - ~/.m2
-          key: webapp-server-{{ checksum "pom.xml" }}
+    docker:
+    - image: circleci/openjdk:8-jdk-stretch
+    
+    steps:
+    - checkout
+    - restore_cache:
+        key: webapp-server-{{ checksum "pom.xml" }}
+    - run: mvn dependency:go-offline
+    - save_cache:
+        paths:
+        - ~/.m2
+        key: webapp-server-{{ checksum "pom.xml" }}
+    - run: mvn package
+    - store_test_results:
+        path: target/surefire-reports
+    - store_artifacts:
+        path: target/webapp-0.0.1-SNAPSHOT.war
+    environment:
+    workflows:
+      version: 2
+    build_deploy:
+    jobs:
+    - build:
+        filters:  
+            branches:
+              only:  
+                - master
 
-        - run: mvn package
-      
-        - store_test_results:
-          path: target/surefire-reports
-      
-        - store_artifacts:
-          path: target/webapp-0.0.1-SNAPSHOT.war
+
+
