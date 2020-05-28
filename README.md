@@ -6,11 +6,9 @@ Name - Sridhar Prasad Panneerselvam
 NU ID - 001347216
 Mail - panneerselvam.s@northeastern.edu
 
-
 ## Technology Stack
 Operating System - MacOS
-Programming Language - Java,Typescript
-Front-end Languages - HTML, SCSS
+Programming Language - Java
 Relational Database - MySQL
 Backend Framework - SpringBoot and Hibernate
 Frontend Framework - Angular 

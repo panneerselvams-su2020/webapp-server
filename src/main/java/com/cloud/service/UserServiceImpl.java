@@ -59,8 +59,12 @@ public class UserServiceImpl implements UserDetailsService {
 		
 	}
 	
+	public User getUser(User user) {
+		User userDetails = userDao.findById(user.getUserName()).get();
+		return userDetails;
+	}
+	
 	public User userLogin(User user) {
-		System.out.println("inside login");
 		User userlogin = userDao.findById(user.getUserName()).get();
 		
 		String enteredPassword = user.getUserPassword();
