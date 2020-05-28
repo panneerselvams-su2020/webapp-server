@@ -1,10 +1,9 @@
-version: 2
 jobs:
   build:
     working_directory: ~/webapp-server
     docker:
     - image: circleci/openjdk:8-jdk-stretch
-
+    
     steps:
     - checkout
     - restore_cache:
@@ -20,13 +19,14 @@ jobs:
     - store_artifacts:
         path: target/webapp-0.0.1-SNAPSHOT.war
   pr_check:
-    working directory: ~/webapp-server
+    working_directory: ~/webapp-server
     docker:
     - image: circleci/openjdk:8-jdk-stretch
     steps:
     - checkout
     - restore_cache:
-    - run : mvn package
+        key: webapp-server-{{ checksum "pom.xml" }}
+    - run: mvn dependency:go-offline
     - save_cache:
         paths:
         - ~/.m2
@@ -50,6 +50,3 @@ workflows:
             branches:
               only:  
                 - master
-
-
-
