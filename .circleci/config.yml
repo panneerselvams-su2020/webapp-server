@@ -39,7 +39,7 @@ jobs:
     environment:
 workflows:
   version: 2
-    pr-check:
+  pr-check:
     
     jobs:
     - pr_check
