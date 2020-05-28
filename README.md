@@ -22,6 +22,13 @@ Tools and Applications needed to run the web application
 3. Angular framework in an IDE to run frontend(Eg: Visual Studio Code)
 4. IDE to use SpringBoot Application(Eg: Spring Tool Suite, Eclipse)
 
+## Api resources
+POST - http://localhost:8080/signup - SignUp a new user
+POST - http://localhost:8080/login - Authenticate the registered user
+GET - http://localhost:8080/user - get logged in user details
+PUT - http://localhost:8080/update - update profile details
+PUT - http://localhost:8080/updatePassword - Update password for the logged in user
+
 ## Build Instructions
 1. Build the Application using Maven Build in Spring Tool Suite
 

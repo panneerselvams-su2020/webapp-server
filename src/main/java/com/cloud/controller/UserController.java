@@ -28,7 +28,7 @@ public class UserController {
 		User user = userService.save(userObj);
 		
 		if( user== null) {
-			return ResponseEntity.badRequest().body(user);
+			return ResponseEntity.ok(user);
 		}
 		else {
 			return ResponseEntity.ok(user);
@@ -43,7 +43,7 @@ public class UserController {
 		User user = userService.update(userObj);
 		
 		if(user == null) {
-			return ResponseEntity.badRequest().body(user);
+			return ResponseEntity.ok(user);
 		}
 		else {
 			return ResponseEntity.ok(user);
@@ -63,7 +63,7 @@ public class UserController {
 	public ResponseEntity<User> getUserToLogin(@RequestBody User userObj){
 		User user = userService.getUser(userObj);
 		if(user == null) {
-			return ResponseEntity.badRequest().body(user);
+			return ResponseEntity.ok(user);
 		}
 		else {
 			return ResponseEntity.ok(user);
@@ -76,7 +76,7 @@ public class UserController {
 		User user = userService.updatePassword(passwordObj);
 		
 		if(user == null) {
-			return ResponseEntity.badRequest().body(user);
+			return ResponseEntity.ok(user);
 		}
 		else {
 			return ResponseEntity.ok(user);
