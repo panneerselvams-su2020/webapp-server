@@ -43,12 +43,9 @@ build/
 /.mvn/**
 # BlueJ files
 *.ctxt
-<<<<<<< HEAD
 
-=======
 *.classpath
 .project
->>>>>>> c4d450915a4936d2995c55a24e3bc5e24ac8d800
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
