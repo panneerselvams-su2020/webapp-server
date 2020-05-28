@@ -54,11 +54,9 @@ public class UserController {
 	public ResponseEntity<User> userLogin(@RequestBody User userObj){
 		User user = userService.userLogin(userObj);
 		
-		if(user == null) {
-			return ResponseEntity.badRequest().body(user);
-		}else {
+		
 			return ResponseEntity.ok(user);
-		}
+		
 	}
 	
 	@PutMapping("/updatePassword")
