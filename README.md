@@ -6,7 +6,6 @@ Name - Sridhar Prasad Panneerselvam
 NU ID - 001347216
 Mail - panneerselvam.s@northeastern.edu
 
-
 ## Technology Stack
 Operating System - MacOS
 Programming Language - Java
@@ -15,6 +14,13 @@ Backend Framework - SpringBoot and Hibernate
 Frontend Framework - Angular 
 Backend IDE - Spring Tool Suite
 Frontend IDE - Visual Studio Code
+
+## Prerequisites
+Tools and Applications needed to run the web application
+1. Java 8
+2. MySQL
+3. Angular framework in an IDE to run frontend(Eg: Visual Studio Code)
+4. IDE to use SpringBoot Application(Eg: Spring Tool Suite, Eclipse)
 
 ## Build Instructions
 1. Build the Application using Maven Build in Spring Tool Suite

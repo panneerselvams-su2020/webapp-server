@@ -6,14 +6,11 @@ target/
 
 ### STS ###
 .apt_generated
-<<<<<<< HEAD
+
 
 .factorypath
-=======
-.classpath
-.factorypath
-.project
->>>>>>> c4d450915a4936d2995c55a24e3bc5e24ac8d800
+
+
 .settings
 .springBeans
 .sts4-cache
@@ -69,3 +66,7 @@ src/main/java/.DS_Store
 src/main/java/com/.DS_Store
 src/main/java/com/cloud/.DS_Store
 .metadata
+/.mvn/
+/mvnw
+/mvnw.bat
+mvnw.cmd

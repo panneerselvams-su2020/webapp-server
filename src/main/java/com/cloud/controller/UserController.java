@@ -59,6 +59,17 @@ public class UserController {
 		
 	}
 	
+	@GetMapping("/user")
+	public ResponseEntity<User> getUserToLogin(@RequestBody User userObj){
+		User user = userService.getUser(userObj);
+		if(user == null) {
+			return ResponseEntity.badRequest().body(user);
+		}
+		else {
+			return ResponseEntity.ok(user);
+		}
+	}
+	
 	@PutMapping("/updatePassword")
 	public ResponseEntity<User> update(@RequestBody Password passwordObj) {
 		
@@ -72,4 +83,24 @@ public class UserController {
 		}
 	}
 	
+	@PutMapping(path="/testLogin")
+	public ResponseEntity<String> authenticateLogin (@RequestBody User userObj) {
+		
+		String response = "";
+	     
+		String userName = userObj.getUserName();
+		String userPassword = userObj.getUserPassword();
+		
+		
+		if(userPassword == "12345678" && userName == "sridharprasad.p@gmail.com")
+		{
+			 response = "Login Success";
+		}
+		else {
+			 response = "Authentication Failed";
+		}
+
+	        	 return ResponseEntity.ok(response);
+
+	}
 }
