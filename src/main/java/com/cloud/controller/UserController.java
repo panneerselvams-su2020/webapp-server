@@ -72,4 +72,24 @@ public class UserController {
 		}
 	}
 	
+	@PutMapping(path="/testLogin")
+	public ResponseEntity<String> authenticateLogin (@RequestBody User userObj) {
+		
+		String response = "";
+	     
+		String userName = userObj.getUserName();
+		String userPassword = userObj.getUserPassword();
+		
+		
+		if(userPassword == "12345678" && userName == "sridharprasad.p@gmail.com")
+		{
+			 response = "Login Success";
+		}
+		else {
+			 response = "Authentication Failed";
+		}
+
+	        	 return ResponseEntity.ok(response);
+
+	}
 }
