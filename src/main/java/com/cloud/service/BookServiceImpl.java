@@ -18,8 +18,7 @@ import com.cloud.model.User;
 public class BookServiceImpl {
 
 	
-	@Autowired
-	private Cart cart;
+
 	
 	@Autowired
 	private BookDao bookDao;
