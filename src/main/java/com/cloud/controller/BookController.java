@@ -35,14 +35,14 @@ public class BookController {
 	
 	@PutMapping("/updateBook")
 	public ResponseEntity<Book> updateBook(@RequestBody Book bookObj){
-		Book book = bookservice.save(bookObj);
+		Book book = bookservice.updateBook(bookObj);
 		
 		return ResponseEntity.ok(book);
 	}
 	
 	@PutMapping("/deleteBook")
 	public ResponseEntity<Book> deleteBook(@RequestBody Book bookObj){
-		Book book = bookservice.save(bookObj);
+		Book book = bookservice.deleteBook(bookObj);
 		
 		return ResponseEntity.ok(book);
 	}

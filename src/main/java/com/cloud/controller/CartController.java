@@ -10,17 +10,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.cloud.model.Cart;
 import com.cloud.service.CartServiceImpl;
 
+@RestController
 public class CartController {
 
 	
 	@Autowired CartServiceImpl cartService;
 	
-	@PostMapping("/addToCart/{bookId}")
-	public ResponseEntity<Cart> addToCart(Authentication auth, @RequestParam int bookId){
+	@PostMapping("/addToCart")
+	public ResponseEntity<Cart> addToCart(Authentication auth, @RequestParam (value="bookId") int bookId){
 		
 		String userName = auth.getName();
 		Cart cart = cartService.addToCart(userName, bookId);

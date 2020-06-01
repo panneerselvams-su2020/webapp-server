@@ -12,6 +12,12 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -51,10 +57,14 @@ public class Book{
 	@DecimalMax("9999.99")
 	private double price;
 	
-	@Column(name="createdTime", nullable=false)
+	@Column(name="createdTime", columnDefinition = "TIMESTAMP")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime createdTime;
 	
-	@Column(name="updatedTime")
+	@Column(name = "updatedTime", columnDefinition = "TIMESTAMP")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime updatedTime;
 	
 	@Column(name="userName")
@@ -62,6 +72,21 @@ public class Book{
 	
 	@Column(name="isDeleted", nullable=false)
 	private boolean isDeleted =false;
+	
+	public Book() {
+	}
+	
+	public Book(String isbn, String title, String author, LocalDate pubDate, int bookQuantity,double price, LocalDateTime createdTime, LocalDateTime updatedTime, boolean isDeleted) {
+		this.isbn=isbn;
+		this.title=title;
+		this.author=author;
+		this.pubDate=pubDate;
+		this.bookQuantity=bookQuantity;
+		this.price=price;
+		this.createdTime=createdTime;
+		this.updatedTime=updatedTime;
+		this.isDeleted=isDeleted;
+	}
 	
 
 	public boolean isDeleted() {
@@ -154,20 +179,7 @@ public class Book{
 
 	
 	
-	public Book() {
-	}
-	
-	public Book(String isbn, String title, String author, LocalDate pubDate, int bookQuantity,double price, LocalDateTime createdTime, LocalDateTime updatedTime, boolean isDeleted) {
-		this.isbn=isbn;
-		this.title=title;
-		this.author=author;
-		this.pubDate=pubDate;
-		this.bookQuantity=bookQuantity;
-		this.price=price;
-		this.createdTime=createdTime;
-		this.updatedTime=updatedTime;
-		this.isDeleted=isDeleted;
-	}
+
 	
 	@Override
 	public String toString() {

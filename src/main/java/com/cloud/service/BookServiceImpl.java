@@ -33,10 +33,15 @@ public class BookServiceImpl {
 		
 		
 		
-		Book returnBook = bookDao.findExistingBook(userName, isbn);
+		Book returnBook = bookDao.findExistingBookAndID(userName, isbn);
 		
-		if(returnBook!=null) {
+		if(returnBook==null) {
 		
+			LocalDateTime time = LocalDateTime.now();
+			book.setCreatedTime(time);
+			Book books = bookDao.save(book);
+			return books;
+		}else if(returnBook.isDeleted()==true){
 			LocalDateTime time = LocalDateTime.now();
 			book.setCreatedTime(time);
 			Book books = bookDao.save(book);

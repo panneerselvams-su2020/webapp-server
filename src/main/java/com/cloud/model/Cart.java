@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="Cart")
 public class Cart {
@@ -26,13 +28,15 @@ public class Cart {
 	
 	@ManyToOne
 	@JoinColumn(name="bookId")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Book book;
+	
 	
 	@Column(name="cartQuantity", nullable=false)
 	private int cartQuantity;
 	
 	@Column(name="cartStatus", nullable=false)
-	private String cartStatus;
+	private boolean cartStatus= false;
 
 	public int getCartId() {
 		return cartId;
@@ -66,11 +70,11 @@ public class Cart {
 		this.cartQuantity = cartQuantity;
 	}
 
-	public String getCartStatus() {
+	public boolean getCartStatus() {
 		return cartStatus;
 	}
 
-	public void setCartStatus(String cartStatus) {
+	public void setCartStatus(boolean cartStatus) {
 		this.cartStatus = cartStatus;
 	}
 	
