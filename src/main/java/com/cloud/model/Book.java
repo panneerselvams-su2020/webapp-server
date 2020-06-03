@@ -2,17 +2,22 @@ package com.cloud.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -57,15 +62,15 @@ public class Book{
 	@DecimalMax("9999.99")
 	private double price;
 	
-	@Column(name="createdTime", columnDefinition = "TIMESTAMP")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime createdTime;
-	
-	@Column(name = "updatedTime", columnDefinition = "TIMESTAMP")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = ISO.DATE_TIME)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime updatedTime;
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "createdTime")
+	private Date createdTime;
+
+	@UpdateTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "updatedTime")
+	private Date updatedTime;
 	
 	@Column(name="userName")
 	private String userName;
@@ -76,7 +81,7 @@ public class Book{
 	public Book() {
 	}
 	
-	public Book(String isbn, String title, String author, LocalDate pubDate, int bookQuantity,double price, LocalDateTime createdTime, LocalDateTime updatedTime, boolean isDeleted) {
+	public Book(String isbn, String title, String author, LocalDate pubDate, int bookQuantity,double price, Date createdTime, Date updatedTime, boolean isDeleted) {
 		this.isbn=isbn;
 		this.title=title;
 		this.author=author;
@@ -153,19 +158,19 @@ public class Book{
 		this.price = price;
 	}
 
-	public LocalDateTime getCreatedTime() {
+	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-	public void setCreatedTime(LocalDateTime createdTime) {
+	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
 
-	public LocalDateTime getUpdatedTime() {
+	public Date getUpdatedTime() {
 		return updatedTime;
 	}
 
-	public void setUpdatedTime(LocalDateTime updatedTime) {
+	public void setUpdatedTime(Date updatedTime) {
 		this.updatedTime = updatedTime;
 	}
 

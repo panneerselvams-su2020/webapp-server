@@ -22,12 +22,12 @@ public class CartController {
 	@Autowired CartServiceImpl cartService;
 	
 	@PostMapping("/addToCart")
-	public ResponseEntity<Cart> addToCart(Authentication auth, @RequestParam (value="bookId") int bookId){
+	public ResponseEntity<Cart> addToCart(Authentication auth, @RequestBody Cart cart){
 		
 		String userName = auth.getName();
-		Cart cart = cartService.addToCart(userName, bookId);
+		Cart newCart = cartService.addToCart(cart,userName);
 		
-		return ResponseEntity.ok(cart);
+		return ResponseEntity.ok(newCart);
 	}
 	
 	@GetMapping("/viewCart")

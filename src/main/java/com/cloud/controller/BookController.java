@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloud.dao.BookDao;
@@ -47,15 +49,15 @@ public class BookController {
 		return ResponseEntity.ok(book);
 	}
 	
-	@GetMapping("getSellerBooks")
-	public ResponseEntity<List<Book>> getBooksForSeller(@RequestBody Book bookObj){
-		List<Book> book = bookservice.getBooksForSeller(bookObj.getUserName());
+	@GetMapping("/getSellerBooks")
+	public ResponseEntity<List<Book>> getBooksForSeller(Authentication auth){
+		List<Book> book = bookservice.getBooksForSeller(auth.getName());
 		return ResponseEntity.ok(book);
 	}
 	
-	@GetMapping("getBuyerBooks")
-	public ResponseEntity<List<Book>> getBooksForBuyer(@RequestBody Book bookObj){
-		List<Book> book = bookservice.getBooksForBuyer(bookObj.getUserName());
+	@GetMapping("/getBuyerBooks")
+	public ResponseEntity<List<Book>> getBooksForBuyer(Authentication auth){
+		List<Book> book = bookservice.getBooksForBuyer(auth.getName());
 		return ResponseEntity.ok(book);
 	}
 }

@@ -21,7 +21,5 @@ public interface BookDao extends JpaRepository<Book, Integer>{
 	@Query("select books from Book books where books.userName!=?1 and books.isDeleted=?2 and books.bookQuantity>0")
 	List<Book> getBooksForBuyer(String userName, boolean isDeleted);
 	
-	@Query("select book from Book book where book.userName=?1 and book.isbn=?2 and book.isDeleted=1")
-	Book findExistingBookAndID(String userName, String isbn);
 	
 }

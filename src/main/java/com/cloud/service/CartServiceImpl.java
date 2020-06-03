@@ -23,30 +23,20 @@ public class CartServiceImpl {
 	
 	@Autowired UserDao userDao;
 	
-	public Cart findExistingCart(String userName) {
-		try {
-			Cart cart = cartDao.findExistingCart(userName);
-			return cart;
-		}catch(Exception e) {
-			return null;
-		}
-	}
 
-	public Cart addToCart(String userName,int bookId) {
+
+	public Cart addToCart(Cart inputCart, String userName) {
 		try {
-			Cart findCart = cartDao.findExistingCart(userName);
+			Cart findCart = cartDao.findExistingCart(userName,inputCart.getBook());
 			if(findCart==null) {
 			
 			Cart cart = new Cart();
-			cart.setCartQuantity(1);
-			
-			cart.setUserName(userName);
+			cart.setCartQuantity(inputCart.getCartQuantity());
 			
 			cart.setUserName(userName);
 			cart.setCartStatus(true);
-		
-			Book book = bookDao.getOne(bookId);
-			cart.setBook(book);
+		 
+			cart.setBook(inputCart.getBook());
 			
 			Cart returnCart = cartDao.save(cart);
 			return returnCart;
@@ -72,8 +62,8 @@ public class CartServiceImpl {
 	public Cart cartUpdate(Cart cart) {
 		// TODO Auto-generated method stub
 		try {
-		Cart findCart = cartDao.findExistingCart(cart.getUserName());
-		if(findCart!=null) {
+		Cart findCart = cartDao.findExistingCart(cart.getUserName(),cart.getBook());
+		if(findCart==null) {
 			findCart.setCartQuantity(cart.getCartQuantity());
 			Cart returnCart = cartDao.save(findCart);
 			return returnCart;
@@ -89,7 +79,7 @@ public class CartServiceImpl {
 		// TODO Auto-generated method stub
 		try {
 			
-			Cart findCart = cartDao.findExistingCart(cart.getUserName());
+			Cart findCart = cartDao.findExistingCart(cart.getUserName(),cart.getBook());
 			if(findCart!=null) {
 				findCart.setCartStatus(false);
 				Cart returnCart = cartDao.save(findCart);
