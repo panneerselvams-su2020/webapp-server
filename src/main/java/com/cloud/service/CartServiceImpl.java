@@ -62,7 +62,6 @@ public class CartServiceImpl {
 	public Cart cartUpdate(Cart cart) {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println(cart);
 		Cart findCart = cartDao.findExistingCart(cart.getUserName(),cart.getBook());
 			findCart.setCartQuantity(cart.getCartQuantity());
 			findCart.setCartStatus(true);
@@ -70,7 +69,6 @@ public class CartServiceImpl {
 			return returnCart;
 
 		}catch(Exception e) {
-			System.out.println(e);
 			return null;
 		}
 	}
