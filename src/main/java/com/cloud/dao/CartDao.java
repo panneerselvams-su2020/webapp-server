@@ -16,7 +16,7 @@ public interface CartDao extends CrudRepository<Cart, Integer> {
 	@Query("select a from Cart a where a.userName=?1 and a.cartStatus=1")
 	List<Cart> getCartList(String userName);
 	
-	@Query("select a from Cart a where a.userName=?1 and a.book = ?2 and a.cartStatus=1")
+	@Query("select a from Cart a where a.userName=?1 and a.book=?2 and a.cartStatus=1")
 	Cart findExistingCart(String userName, Book book);
 	
 }
