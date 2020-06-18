@@ -250,6 +250,46 @@ public class BookServiceImpl {
 	    	  return image;
 	      }
 	}
+
+	public List<GetBookImage> getBookForBuyer(Book book,String userName) {
+		// TODO Auto-generated method stub
+		
+		try {
+			 String isbn = book.getIsbn();
+			 
+			 Book bk = bookDao.findExistingBookByIsbn(isbn,userName);
+			 String isbnNew = bk.getIsbn();
+			 
+            List<GetBookImage> obj = new ArrayList<>();
+			 List<BookImage> image = imagedao.findbybook(bk);
+			
+			
+			for(BookImage i: image) {
+				GetBookImage gi = new GetBookImage();
+				String name = i.getName();
+				S3ObjectInputStream is = s3client.getObject(new GetObjectRequest(s3, name)).getObjectContent();
+				try {
+					byte[] bytes = IOUtils.toByteArray(is);
+					StringBuilder st = new StringBuilder();
+					st.append("data:image/png;base64,");
+					st.append(Base64.getEncoder().encodeToString(bytes));
+					gi.setImage(st.toString());
+					gi.setName(name);
+					obj.add(gi);
+				}
+				catch(IOException e) {
+					System.out.println("getbook().retrieval failed :" + e.getMessage()); 
+				}
+			}
+			return obj;
+		}
+		catch(Exception e) {
+			System.out.println("Exception in book view of seller");
+			return null;
+		}
+	
+	}
+
 	
 	
 }

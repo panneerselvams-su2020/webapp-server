@@ -92,6 +92,14 @@ public class BookController {
 		
 	}
 	
+	@PostMapping(path="/viewBuyerImage")
+	public ResponseEntity<List<GetBookImage>> buyview(@RequestBody Book book,Authentication auth){
+		String userName = auth.getName();
+		List<GetBookImage> bk = bookservice.getBookForBuyer(book, userName);
+		return ResponseEntity.ok(bk);
+		
+	}
+	
 	@PutMapping(path="/deleteimg")
     public ResponseEntity<BookImage> delete(@RequestBody BookImage book){
 		

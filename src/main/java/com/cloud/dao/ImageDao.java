@@ -14,5 +14,7 @@ public interface ImageDao extends JpaRepository<BookImage, String>{
 	
 	@Query("Select image from BookImage image where image.book = ?1")
 	List<BookImage> findbybook(Book book);
+	
+	
 
 }
