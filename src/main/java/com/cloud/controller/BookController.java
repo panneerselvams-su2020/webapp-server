@@ -1,6 +1,8 @@
 package com.cloud.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cloud.dao.BookDao;
 import com.cloud.model.Book;
+import com.cloud.model.BookImage;
+import com.cloud.model.BookRequest;
+import com.cloud.model.GetBookImage;
 import com.cloud.model.User;
 import com.cloud.service.BookServiceImpl;
 
@@ -26,14 +31,32 @@ public class BookController {
 	
 	@Autowired
 	private BookDao bookDao;
-	
-	@PostMapping("/addBook")
-	public ResponseEntity<Book> save(@RequestBody Book bookObj) {
-	
-		Book book = bookservice.save(bookObj);
 		
-		return ResponseEntity.ok(book);
-}
+
+@PostMapping("/addBook")
+	public ResponseEntity<List<BookImage>> save(@RequestBody BookRequest request) {
+	
+		Book book = bookservice.save(request.getBook());	
+		
+		Set<BookImage> ImgSet = new HashSet<BookImage>();
+		
+		if(book!=null) {
+			BookImage img = new BookImage();
+			img.setBook(book);
+			List<String> url = request.getImage();
+			List<BookImage> images = bookservice.uploadImage(img,url);
+			if(images.size()>0) {
+				return ResponseEntity.ok(images);
+			}else {
+				return ResponseEntity.ok(images);
+			}
+			
+		}else {
+			return ResponseEntity.ok(null);
+		}
+		
+		
+	}
 	
 	@PutMapping("/updateBook")
 	public ResponseEntity<Book> updateBook(@RequestBody Book bookObj){
@@ -60,4 +83,44 @@ public class BookController {
 		List<Book> book = bookservice.getBooksForBuyer(auth.getName());
 		return ResponseEntity.ok(book);
 	}
+	
+	@PostMapping(path="/viewImage")
+	public ResponseEntity<List<GetBookImage>> view(@RequestBody Book book, Authentication auth){
+		String userName = auth.getName();
+		List<GetBookImage> image = bookservice.viewBooks(book,userName);
+		return ResponseEntity.ok(image);
+		
+	}
+	
+	@PostMapping(path="/viewBuyerImage")
+	public ResponseEntity<List<GetBookImage>> buyview(@RequestBody Book book,Authentication auth){
+		String userName = auth.getName();
+		List<GetBookImage> bk = bookservice.getBookForBuyer(book, userName);
+		return ResponseEntity.ok(bk);
+		
+	}
+	
+	@PutMapping(path="/deleteimg")
+    public ResponseEntity<BookImage> delete(@RequestBody BookImage book){
+		
+		BookImage image = bookservice.removeBook(book);
+		return ResponseEntity.ok(image);
+		
+	}
+	
+	@PutMapping(path="/updateimg")
+    public ResponseEntity<List<BookImage>> updateimage(@RequestBody BookRequest book){
+	
+		    
+			BookImage image = new BookImage();
+			image.setBook(book.getBook());
+			List<String> url = book.getImage();
+			List<BookImage> img = bookservice.uploadImage(image, url);
+			if(img.size() > 0)
+				return ResponseEntity.ok(img);
+			else
+				return ResponseEntity.ok(null);
+	
+ }
+	
 }

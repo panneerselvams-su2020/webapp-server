@@ -3,7 +3,10 @@ package com.cloud.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,11 +25,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -78,6 +84,11 @@ public class Book{
 	@Column(name="isDeleted", nullable=false)
 	private boolean isDeleted =false;
 	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "book",cascade = CascadeType.ALL)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
+	private Set<BookImage> images=new HashSet<BookImage>();
+	
 	public Book() {
 	}
 	
@@ -93,6 +104,19 @@ public class Book{
 		this.isDeleted=isDeleted;
 	}
 	
+	
+
+	public Set<BookImage> getImages() {
+		return images;
+	}
+
+	public void setImages(Set<BookImage> images) {
+		this.images = images;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 	public boolean isDeleted() {
 		return isDeleted;
