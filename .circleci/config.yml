@@ -57,8 +57,10 @@ jobs:
           aws configure set region ${aws_region}
           aws configure list
           pwd
-          cd /target/
-          ls -al
+          ls -lrt *
+          cd webapp/
+          cd target/
+          ls -lrt *
     environment:
 workflows:
   version: 2
