@@ -17,7 +17,16 @@ jobs:
     - store_test_results:
         path: target/surefire-reports
     - store_artifacts:
-        path: target/webapp-0.0.1-SNAPSHOT.war
+        path: target/webapp-0.0.1-SNAPSHOT.jar
+    - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get -y -qq install awscli
+            aws --version
+    - run: 
+          name: Upload jar to S3 bucket
+          command: aws s3 --region us-east-1 cp /users/admin/Documents/NEU/GitHub_Repo/Cloud/webapp-server/target/webapp-server-0.0.1-SNAPSHOT.jar s3://code-deploy.sridharprasadpanneerselvam.me 
+
   pr_check:
     working_directory: ~/webapp-server
     docker:
