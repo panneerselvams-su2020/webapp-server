@@ -1,3 +1,4 @@
+version: 2
 orbs:
   aws-s3: circleci/aws-s3@1.0.15
 jobs:
@@ -20,18 +21,12 @@ jobs:
         path: target/surefire-reports
     - store_artifacts:
         path: target/webapp-0.0.1-SNAPSHOT.jar
-    - run: mkdir bucket && echo "lorem ipsum" > bucket/build_asset.txt
-      - aws-s3/sync:
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          from: bucket
-          overwrite: true
-          to: 's3://codedeploy.sridharprasadpanneerselvam.me'
-      - aws-s3/copy:
-          arguments: '--dry-run'
-          from: bucket/build_asset.txt
-          to: 's3://codedeploy.sridharprasadpanneerselvam.me'
+    - run: 
+        name: Install aws and configure
+        command: |
+          sudo apt-get update && sudo apt-get install python-pip
+          sudo pip install awscli
+          sudo aws --version
 
   pr_check:
     working_directory: ~/webapp-server
@@ -51,18 +46,12 @@ jobs:
         path: target/surefire-reports
     - store_artifacts:
         path: target/webapp-0.0.1-SNAPSHOT.war
-    - run: mkdir bucket && echo "lorem ipsum" > bucket/build_asset.txt
-      - aws-s3/sync:
-          arguments: |
-            --acl public-read \
-            --cache-control "max-age=86400"
-          from: bucket
-          overwrite: true
-          to: 's3://codedeploy.sridharprasadpanneerselvam.me'
-      - aws-s3/copy:
-          arguments: '--dry-run'
-          from: bucket/build_asset.txt
-          to: 's3://codedeploy.sridharprasadpanneerselvam.me'
+    - run: 
+        name: Install aws and configure
+        command: |
+          sudo apt-get update && sudo apt-get install python-pip
+          sudo pip install awscli
+          sudo aws --version
     environment:
 workflows:
   version: 2
