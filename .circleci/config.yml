@@ -56,11 +56,10 @@ jobs:
           aws configure set aws_secret_access_key ${aws_secret_key}
           aws configure set region ${aws_region}
           aws configure list
-          pwd
-          ls -lrt *
           cd webapp/
           cd target/
           ls -lrt *
+          aws s3 cp webapp-server-0.0.1-SNAPSHOT.jar s3://${code_deploy_bucket} --region ${aws_region}
     environment:
 workflows:
   version: 2
