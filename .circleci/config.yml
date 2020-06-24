@@ -58,7 +58,7 @@ jobs:
           aws configure list
           pwd
           ls -lrt *
-          aws s3 cp /target/webapp-server-0.0.1-SNAPSHOT.jar s3://${code_deploy_bucket} --region ${aws_region}
+          aws s3 cp target/webapp-server-0.0.1-SNAPSHOT.jar s3://${code_deploy_bucket} --region ${aws_region}
     environment:
 workflows:
   version: 2
