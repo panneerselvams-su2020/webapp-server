@@ -64,7 +64,7 @@ jobs:
           cd ../
           ls -al
           zip -r ${BUILD_COUNTER}_webapp-server.zip *
-          aws s3 cp ${BUILD_COUNTER}_webapp.zip s3://${code_deploy_bucket} --region ${aws_region}
+          aws s3 cp ${BUILD_COUNTER}_webapp-server.zip s3://${code_deploy_bucket} --region ${aws_region}
     environment:
 workflows:
   version: 2
