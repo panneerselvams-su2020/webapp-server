@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script is executed before copying the resource
+# This script is executed before copying the resource to the instance
 export app_root=/home/ubuntu/webapp
 if [ -d "$app_root" ];then
     rm -rf /home/ubuntu/webapp
