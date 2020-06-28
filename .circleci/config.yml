@@ -1,6 +1,4 @@
 version: 2
-orbs:
-  aws-s3: circleci/aws-s3@1.0.15
 jobs:
   build:
     working_directory: ~/webapp-server
@@ -36,7 +34,7 @@ jobs:
           echo "${BUILD_COUNTER}"
           zip -r ${BUILD_COUNTER}_webapp-server.zip *
           aws s3 cp ${BUILD_COUNTER}_webapp-server.zip s3://${code_deploy_bucket} --region ${aws_region}
-          aws deploy create-deployment --application-name csye6225-webapp-server \
+          aws deploy create-deployment --application-name csye6225-webapp \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --deployment-group-name csye6225-webapp-server-deployment \
             --ignore-application-stop-failures \
