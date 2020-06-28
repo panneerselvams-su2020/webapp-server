@@ -2,8 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /target
-    destination: /home/ubuntu/webapp-server
-
+    destination: /home/ubuntu/webapp
 hooks:
   BeforeInstall:
     - location: scripts/beforeInstall.sh

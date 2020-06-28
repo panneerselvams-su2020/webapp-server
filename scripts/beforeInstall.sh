@@ -1,12 +1,9 @@
 #!/bin/bash
-
 # This script is executed before copying the resource
-
-
-export app_root=/home/ubuntu/webapp-server
+export app_root=/home/ubuntu/webapp
 if [ -d "$app_root" ];then
-    rm -rf /home/ubuntu/webapp-server
-    mkdir -p /home/ubuntu/webapp-server
+    rm -rf /home/ubuntu/webapp
+    mkdir -p /home/ubuntu/webapp
 else
-    mkdir -p /home/ubuntu/webapp-server
+    mkdir -p /home/ubuntu/webapp
 fi
