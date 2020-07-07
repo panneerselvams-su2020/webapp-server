@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -50,10 +52,13 @@ public class BookServiceImpl {
 	@Autowired
 	private BookDao bookDao;
 	
+	private static final Logger logger = LogManager.getLogger(BookServiceImpl.class);
+	
 	
 	public Book save(Book book) {
 
-		
+		//statsDClient.incrementCounter("endpoint.book.create.http.post");
+        long start = System.currentTimeMillis();
 		try {
 		String isbn = book.getIsbn();
 		String userName = book.getUserName();
@@ -64,9 +69,11 @@ public class BookServiceImpl {
 		
 		if(returnBook==null) {
 			Book books = bookDao.save(book);
+			logger.info("Book create successfull");
 			return books;
 		}else if(returnBook.isDeleted()==true){
 			Book books = bookDao.save(book);
+			logger.info("Book create successfull");
 			return books;
 		}else {
 			return null;
@@ -95,6 +102,7 @@ public class BookServiceImpl {
 				returnBook.setPrice(book.getPrice());
 				returnBook.setPubDate(book.getPubDate());				
 				Book books = bookDao.save(returnBook);
+				logger.info("Book update successfull");
 				return books;
 			}else {
 				return null;
@@ -113,6 +121,7 @@ public class BookServiceImpl {
 			if(returnBook!=null) {
 			returnBook.setIsDeleted(true);
 			Book books = bookDao.save(returnBook);
+			logger.info("Book deletion successfull");
 			return books;
 			}else {
 				return null;
@@ -126,6 +135,7 @@ public class BookServiceImpl {
 		try {
 			boolean checkStatus = false;
 			List<Book> returnBook = bookDao.getBooksForSeller(userName, checkStatus);
+			logger.info("Book list for seller successfull");
 			return returnBook;
 		}catch(Exception e) {
 			return null;
@@ -136,6 +146,7 @@ public class BookServiceImpl {
 		try {
 			boolean checkStatus = false;
 			List<Book> returnBook = bookDao.getBooksForBuyer(userName, checkStatus);
+			logger.info("Book list for buyer successfull");
 			return returnBook;
 		}catch(Exception e) {
 			return null;
@@ -162,6 +173,7 @@ public class BookServiceImpl {
 				BookImage image =  imagedao.save(img);
 				imageSet.add(image);
 				listImage.add(image);
+				logger.info("Book list for buyer successfull");
 				
 			}catch(AmazonServiceException a) {
 				System.out.println("Uploading image in s3 bucket failed");

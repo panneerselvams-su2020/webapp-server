@@ -2,6 +2,8 @@ package com.cloud.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,8 @@ public class CartController {
 
 	
 	@Autowired CartServiceImpl cartService;
+	
+	private static final Logger logger = LogManager.getLogger(CartController.class);
 	
 	@PostMapping("/addToCart")
 	public ResponseEntity<Cart> addToCart(Authentication auth, @RequestBody Cart cart){
