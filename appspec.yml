@@ -3,6 +3,8 @@ os: linux
 files:
   - source: /target
     destination: /home/ubuntu/webapp
+  - source: /CloudWatchConfig.json
+    destination: /opt
 hooks:
   BeforeInstall:
     - location: scripts/beforeInstall.sh
