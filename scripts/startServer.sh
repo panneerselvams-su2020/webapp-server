@@ -2,6 +2,9 @@
 
 # This script is executed after copying the resource
 
+# #copy config file to path
+# sudo cp /home/ubuntu/cloudwatch-config.json /opt/aws/amazon-cloudwatch-agent/etc/
+
 #starting cloudwatch agent
 sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     -a fetch-config \

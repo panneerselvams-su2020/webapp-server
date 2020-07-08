@@ -2,8 +2,8 @@ package com.cloud.controller;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,8 @@ public class UserController {
 	@Autowired
 	private UserServiceImpl  userService;
 	
-	private static final Logger logger = LogManager.getLogger(UserController.class);
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
 	
 	@PostMapping("/signup")
 	public ResponseEntity<User> save(@RequestBody User userObj) {

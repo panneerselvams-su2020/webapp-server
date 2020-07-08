@@ -1,6 +1,6 @@
 package com.cloud.controller;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +14,7 @@ import com.cloud.model.JwtRequest;
 import com.cloud.model.JwtResponse;
 import com.cloud.model.User;
 import com.cloud.model.UserToken;
+import com.cloud.service.BookServiceImpl;
 import com.cloud.service.UserServiceImpl;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +32,7 @@ public class AuthController {
     @Autowired
     private UserServiceImpl jwtUserDetailsService;
 
-    private static final Logger logger = LogManager.getLogger(AuthController.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {

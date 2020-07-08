@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +52,7 @@ public class BookServiceImpl {
 	@Autowired
 	private BookDao bookDao;
 	
-	private static final Logger logger = LogManager.getLogger(BookServiceImpl.class);
+	private final Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
 	
 	
 	public Book save(Book book) {
