@@ -35,6 +35,7 @@ import com.cloud.model.BookImage;
 import com.cloud.model.Cart;
 import com.cloud.model.GetBookImage;
 import com.cloud.model.User;
+import com.timgroup.statsd.StatsDClient;
 
 @Service
 public class BookServiceImpl {
@@ -47,6 +48,9 @@ public class BookServiceImpl {
 	
 	@Autowired
 	private AmazonS3 s3client;
+	
+	@Autowired
+	private StatsDClient stats;
 
 	
 	@Autowired
@@ -57,8 +61,8 @@ public class BookServiceImpl {
 	
 	public Book save(Book book) {
 
-		//statsDClient.incrementCounter("endpoint.book.create.http.post");
-        long start = System.currentTimeMillis();
+		stats.incrementCounter("endpoint.book.create.http.post");
+        long statsStart = System.currentTimeMillis();
 		try {
 		String isbn = book.getIsbn();
 		String userName = book.getUserName();
@@ -68,18 +72,26 @@ public class BookServiceImpl {
 		Book returnBook = bookDao.findExistingBook(userName, isbn);
 		
 		if(returnBook==null) {
+			long startTime = System.currentTimeMillis();
 			Book books = bookDao.save(book);
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
 			logger.info("Book create successfull");
 			return books;
 		}else if(returnBook.isDeleted()==true){
+			long startTime = System.currentTimeMillis();
 			Book books = bookDao.save(book);
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
 			logger.info("Book create successfull");
 			return books;
 		}else {
+			logger.error("Book creation failed");
 			return null;
 		}
 		
 	}catch(Exception e) {
+		logger.error("Error in book creation");
 		return null;
 	}
 		
@@ -109,6 +121,7 @@ public class BookServiceImpl {
 			}
 			
 		}catch(Exception e) {
+			logger.error("Error in book update");
 			return null;
 		}
 	}
@@ -127,6 +140,7 @@ public class BookServiceImpl {
 				return null;
 			}
 		}catch(Exception e) {
+			logger.error("Error in book deletion");
 			return null;
 		}
 	}
@@ -138,6 +152,7 @@ public class BookServiceImpl {
 			logger.info("Book list for seller successfull");
 			return returnBook;
 		}catch(Exception e) {
+			logger.error("Error in booklist seller");
 			return null;
 		}
 	}
@@ -149,6 +164,7 @@ public class BookServiceImpl {
 			logger.info("Book list for buyer successfull");
 			return returnBook;
 		}catch(Exception e) {
+			logger.error("Error in booklist buyer");
 			return null;
 		}
 	}
@@ -177,6 +193,7 @@ public class BookServiceImpl {
 				
 			}catch(AmazonServiceException a) {
 				System.out.println("Uploading image in s3 bucket failed");
+				logger.error("Error in upload image to s3 bucket");
 			}
 			
 		}
@@ -204,7 +221,7 @@ public class BookServiceImpl {
 		}
 		catch(Exception e)
 		{
-			
+			logger.error("Error in converting image to blob");
 		}
 		
 		return file;
@@ -236,13 +253,15 @@ public class BookServiceImpl {
 					
 				}
 				catch(IOException e) {
-					System.out.println("GetBook failed"); 
+					System.out.println("GetBook failed");
+					logger.error("GetBookImage failed");
 				}
 			}
 			return obj;
 		}
 		catch(Exception e) {
 			System.out.println("Seller View Book Exception");
+			logger.error("Seller View BookImage Exception");
 			return null;
 		}
 		
@@ -256,9 +275,11 @@ public class BookServiceImpl {
 	    	  s3client.deleteObject(s3, name);  
 	    	  imagedao.delete(image);
 	    	  BookImage img = imagedao.getOne(name);
+	    	  logger.info("remove book image successfull");
 	    	  return img;
 	      }
 	      catch(Exception e) {
+	    	  logger.error("error in remove image");
 	    	  return image;
 	      }
 	}
@@ -287,9 +308,11 @@ public class BookServiceImpl {
 						gi.setImage(st.toString());
 						gi.setName(name);
 						obj.add(gi);
+						logger.info("Get Book for buyer successfull");
 					}
 					catch(IOException e) {
-						System.out.println("getbook().retrieval failed :" + e.getMessage()); 
+						System.out.println("getbook().retrieval failed :" + e.getMessage());
+						logger.error("error in getBookforbuyer");
 					}
 				}
 				
@@ -299,6 +322,7 @@ public class BookServiceImpl {
 		}
 		catch(Exception e) {
 			System.out.println("Exception in book view of seller");
+			logger.error("Exception in book view of seller");
 			return null;
 		}
 	

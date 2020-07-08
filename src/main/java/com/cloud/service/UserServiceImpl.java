@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +31,8 @@ public class UserServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserDao userDao;
 	
-
+	private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+	
 	@Transactional
 	public User save(User user) {
 		// TODO Auto-generated method stub
@@ -40,8 +43,10 @@ public class UserServiceImpl implements UserDetailsService {
 			String password = BCrypt.hashpw(decode,BCrypt.gensalt());
 			user.setUserPassword(password);
 			User returnUser = userDao.save(user);
+			logger.info("user create successfull");
 			return returnUser;
 		}else {
+			logger.error("user create error");
 			return null;
 		}
 
@@ -55,12 +60,14 @@ public class UserServiceImpl implements UserDetailsService {
 		
 		User user1 = userDao.save(userUpdate);
 		System.out.println(user1);
+		logger.info("user update successful");
 		return user1;
 		
 	}
 	
 	public User getUser(User user) {
 		User userDetails = userDao.findById(user.getUserName()).get();
+		logger.info("get User success");
 		return userDetails;
 	}
 	
@@ -74,9 +81,11 @@ public class UserServiceImpl implements UserDetailsService {
 		if(matchPassword) {
 			System.out.println("pwd matchws");
 			System.out.println(userlogin.toString());
+			logger.info("password matched");
 			return userlogin;
 		}else {
 			System.out.println("unmatched");
+			logger.error("password do not match");
 			return null;
 		}
 		
@@ -88,6 +97,7 @@ public class UserServiceImpl implements UserDetailsService {
 
         User user = userDao.findByUsername(username);
         if (user == null) {
+        	logger.error("User not found");
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
         return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getUserPassword(),
@@ -108,9 +118,11 @@ public class UserServiceImpl implements UserDetailsService {
 			String finalPassword = BCrypt.hashpw(decodeNew,BCrypt.gensalt());
 			user.setUserPassword(finalPassword);
 			User finalUser = userDao.save(user);
+			logger.info("password match in update");
 			return finalUser;
 			
 		}
+		logger.error("passwords dont match in update");
 		return null;
 	}
 	
