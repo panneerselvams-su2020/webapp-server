@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
 
-	<appender name="FILE-AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="FILE-AUDIT" class="ch.qos.logback.core.FileAppender">
 		<file>/home/ubuntu/csye6225.log</file>
 		<append>true</append>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -18,6 +18,6 @@
 		</encoder>
 	</appender>
 	<root level="info">
-		<appender-ref ref="FILE-AUDIT" />
+		<appender-ref ref="FILE-AUDIT"/>
 	</root>
 </configuration>
