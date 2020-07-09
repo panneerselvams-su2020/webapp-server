@@ -50,39 +50,42 @@ public class BookServiceImpl {
 	private AmazonS3 s3client;
 	
 	@Autowired
-	private StatsDClient stats;
-
+	private BookDao bookDao;
 	
 	@Autowired
-	private BookDao bookDao;
+	private StatsDClient stats;
 	
 	private final Logger logger = LoggerFactory.getLogger(BookServiceImpl.class);
 	
 	
 	public Book save(Book book) {
 
-		stats.incrementCounter("endpoint.book.create.http.post");
-        long statsStart = System.currentTimeMillis();
+		
 		try {
 		String isbn = book.getIsbn();
 		String userName = book.getUserName();
 		
 		
-		
+		long timeStart = System.currentTimeMillis();
 		Book returnBook = bookDao.findExistingBook(userName, isbn);
+		long timeEnd = System.currentTimeMillis();
+        long diffInTime = (timeEnd - timeStart);
+        stats.recordExecutionTime("Updated Book In DB in ",diffInTime);
 		
 		if(returnBook==null) {
-			long startTime = System.currentTimeMillis();
+			long timeStarted = System.currentTimeMillis();
 			Book books = bookDao.save(book);
-			long endTime = System.currentTimeMillis();
-			long duration = (endTime - startTime);
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("AddedBookInDB in ",diff);
 			logger.info("Book create successfull");
 			return books;
 		}else if(returnBook.isDeleted()==true){
-			long startTime = System.currentTimeMillis();
+			long timeStarted = System.currentTimeMillis();
 			Book books = bookDao.save(book);
-			long endTime = System.currentTimeMillis();
-			long duration = (endTime - startTime);
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("AddedBookInDB in ",diff);
 			logger.info("Book create successfull");
 			return books;
 		}else {
@@ -101,9 +104,11 @@ public class BookServiceImpl {
 		try {
 			String isbn = book.getIsbn();
 			String userName = book.getUserName();
-			
+			long timeStarted = System.currentTimeMillis();
 			Book returnBook = bookDao.findExistingBook(userName, isbn);
-			
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("Found Existing Book in ",diff);
 			if(returnBook!=null) {
 				LocalDateTime time = LocalDateTime.now();
 				returnBook.setAuthor(book.getAuthor());
@@ -112,8 +117,12 @@ public class BookServiceImpl {
 				returnBook.setUserName(userName);
 				returnBook.setTitle(book.getTitle());
 				returnBook.setPrice(book.getPrice());
-				returnBook.setPubDate(book.getPubDate());				
+				returnBook.setPubDate(book.getPubDate());
+				long timeStart = System.currentTimeMillis();
 				Book books = bookDao.save(returnBook);
+				long timeEnd = System.currentTimeMillis();
+	            long diffInTime = (timeEnded - timeStarted);
+	            stats.recordExecutionTime("Updated Book In DB in ",diffInTime);
 				logger.info("Book update successfull");
 				return books;
 			}else {
@@ -130,10 +139,18 @@ public class BookServiceImpl {
 		try {
 			String isbn = book.getIsbn();
 			String userName = book.getUserName();
+			long timeStarted = System.currentTimeMillis();
 			Book returnBook = bookDao.findExistingBook(userName, isbn);
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("Found Existing Book in ",diff);
 			if(returnBook!=null) {
 			returnBook.setIsDeleted(true);
+			long timeStart = System.currentTimeMillis();
 			Book books = bookDao.save(returnBook);
+			long timeEnd = System.currentTimeMillis();
+            long diffInTime = (timeEnded - timeStarted);
+            stats.recordExecutionTime("UpdatedBookInDB in ",diffInTime);
 			logger.info("Book deletion successfull");
 			return books;
 			}else {
@@ -148,7 +165,11 @@ public class BookServiceImpl {
 	public List<Book> getBooksForSeller(String userName) {
 		try {
 			boolean checkStatus = false;
+			long timeStarted = System.currentTimeMillis();
 			List<Book> returnBook = bookDao.getBooksForSeller(userName, checkStatus);
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("Get Book list for Seller in ",diff);
 			logger.info("Book list for seller successfull");
 			return returnBook;
 		}catch(Exception e) {
@@ -160,7 +181,11 @@ public class BookServiceImpl {
 	public List<Book> getBooksForBuyer(String userName) {
 		try {
 			boolean checkStatus = false;
+			long timeStarted = System.currentTimeMillis();
 			List<Book> returnBook = bookDao.getBooksForBuyer(userName, checkStatus);
+			long timeEnded = System.currentTimeMillis();
+            long diff = (timeEnded - timeStarted);
+            stats.recordExecutionTime("Get Book list for Buyer in ",diff);
 			logger.info("Book list for buyer successfull");
 			return returnBook;
 		}catch(Exception e) {
@@ -175,8 +200,11 @@ public class BookServiceImpl {
 		List<BookImage> listImage = new ArrayList<BookImage>();
 		
 		Book book = img.getBook();
+		long timeStarted = System.currentTimeMillis();
 		Book bk = bookDao.findExistingBook(book.getUserName(), book.getIsbn());
-		
+		long timeEnded = System.currentTimeMillis();
+        long diff = (timeEnded - timeStarted);
+        stats.recordExecutionTime("Upload Image in ",diff);
 		for(String s : url) {
 			long timeStamp = System.currentTimeMillis();
 			String imageName = img.getBook().getUserName()+"-time-"+timeStamp;
@@ -185,7 +213,11 @@ public class BookServiceImpl {
 			File f = ConvertBlobToImage(s);
 			
 			try {
+				long startForS3 = System.currentTimeMillis();
 				s3client.putObject(new PutObjectRequest(s3,imageName,f));
+				long endForS3 = System.currentTimeMillis();
+				long diffS3 = (endForS3-startForS3);
+				stats.recordExecutionTime("S3 putObject time is ", diffS3);
 				BookImage image =  imagedao.save(img);
 				imageSet.add(image);
 				listImage.add(image);
@@ -231,8 +263,11 @@ public class BookServiceImpl {
 		// TODO Auto-generated method stub
 		try {
 			 String isbn = book.getIsbn();
+			 long timeStarted = System.currentTimeMillis();
 			 Book bk = bookDao.findExistingBook(userName,isbn);
-            
+			 long timeEnded = System.currentTimeMillis();
+	         long diff = (timeEnded - timeStarted);
+	         stats.recordExecutionTime("Found Existing Book in ",diff);
 			 List<BookImage> image = imagedao.findbybook(bk);
 			 List<GetBookImage> obj = new ArrayList<>();
 			  
@@ -240,7 +275,11 @@ public class BookServiceImpl {
 			for(BookImage b: image) {
 				GetBookImage getBook = new GetBookImage();
 				String name = b.getName();
+				long startForS3 = System.currentTimeMillis();
 				S3ObjectInputStream is = s3client.getObject(new GetObjectRequest(s3, name)).getObjectContent();
+				long endForS3 = System.currentTimeMillis();
+				long diffS3 = (endForS3-startForS3);
+				stats.recordExecutionTime("S3 gettObject time is ", diffS3);
 				try {
 					byte[] bytes = IOUtils.toByteArray(is);
 					StringBuilder sb = new StringBuilder();
@@ -272,7 +311,11 @@ public class BookServiceImpl {
 		// TODO Auto-generated method stub
 	      String name = image.getName();
 	      try {
-	    	  s3client.deleteObject(s3, name);  
+	    	  long startForS3 = System.currentTimeMillis();
+	    	  s3client.deleteObject(s3, name);
+	    	  long endForS3 = System.currentTimeMillis();
+	    	  long diffS3 = (endForS3-startForS3);
+	    	  stats.recordExecutionTime("S3 deleteObject time is ", diffS3);
 	    	  imagedao.delete(image);
 	    	  BookImage img = imagedao.getOne(name);
 	    	  logger.info("remove book image successfull");
@@ -289,9 +332,11 @@ public class BookServiceImpl {
 		
 		try {
 			 String isbn = book.getIsbn();
-			 
+			 long timeStarted = System.currentTimeMillis();
 			 List<Book> bk = bookDao.findExistingBookByIsbn(isbn,userName);
-			 
+			 long timeEnded = System.currentTimeMillis();
+	         long diff = (timeEnded - timeStarted);
+	         stats.recordExecutionTime("Found Existing Book in ",diff);
 			 
             List<GetBookImage> obj = new ArrayList<>();
             for(Book b : bk) {
@@ -299,7 +344,11 @@ public class BookServiceImpl {
 			 for(BookImage i: image) {
 					GetBookImage gi = new GetBookImage();
 					String name = i.getName();
+					long startForS3 = System.currentTimeMillis();
 					S3ObjectInputStream is = s3client.getObject(new GetObjectRequest(s3, name)).getObjectContent();
+					long endForS3 = System.currentTimeMillis();
+					long diffS3 = (endForS3-startForS3);
+					stats.recordExecutionTime("S3 gettObject time is ", diffS3);
 					try {
 						byte[] bytes = IOUtils.toByteArray(is);
 						StringBuilder st = new StringBuilder();
