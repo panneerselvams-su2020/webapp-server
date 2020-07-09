@@ -2,4 +2,4 @@
 
 # This script is executed after starting the server
 
-killall -s KILL java
+sudo systemctl stop webapp.service
