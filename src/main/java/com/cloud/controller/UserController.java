@@ -30,7 +30,6 @@ public class UserController {
 	
 	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@CrossOrigin
 	@PostMapping("/signup")
 	public ResponseEntity<User> save(@RequestBody User userObj) {
 		stats.incrementCounter("endpoint.user.addUser.http.post");
