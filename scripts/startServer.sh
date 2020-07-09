@@ -17,3 +17,8 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
 cd /home/ubuntu/webapp/
 java -jar webapp-server-0.0.1-SNAPSHOT.jar > /dev/null 2> /dev/null < /dev/null &
 
+crontab -l > mycron
+echo "@reboot java -jar webapp-server-0.0.1-SNAPSHOT.jar > /dev/null 2> /dev/null < /dev/null &"
+crontab mycron
+rm mycron
+
