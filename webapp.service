@@ -1,0 +1,14 @@
+[Unit]
+Description=webapp service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+EnvironmentFile=/etc/environment
+ExecStart= /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /home/ubuntu/webapp/webapp-0.0.1-SNAPSHOT.jar
+
+[Install]
+WantedBy=multi-user.target
