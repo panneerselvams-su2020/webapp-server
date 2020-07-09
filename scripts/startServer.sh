@@ -15,7 +15,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     -s
 
 cd /home/ubuntu/webapp
-chmod +x webapp-0.0.1-SNAPSHOT.jar
+chmod +x webapp-server-0.0.1-SNAPSHOT.jar
 sudo systemctl daemon-reload
 sudo systemctl enable webapp.service
 sudo systemctl start webapp.service
