@@ -2,19 +2,16 @@ version: 0.0
 os: linux
 files:
   - source: /target
-    destination: /home/ubuntu/webapp
+    destination: /opt/tomcat/webapps
   - source: /CloudWatchConfig.json
     destination: /opt
 hooks:
-  BeforeInstall:
-    - location: scripts/beforeInstall.sh
+  AfterInstall:
+    - location: scripts/afterInstall.sh
       timeout: 300
       runas: root
   ApplicationStart:
     - location: scripts/startServer.sh
       timeout: 300
       runas: root
-  ApplicationStop:
-    - location: scripts/stopServer.sh
-      timeout: 300
-      runas: root
+  
