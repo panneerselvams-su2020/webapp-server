@@ -146,6 +146,11 @@ public class BookServiceImpl {
             stats.recordExecutionTime("Found Existing Book in ",diff);
 			if(returnBook!=null) {
 			returnBook.setIsDeleted(true);
+			Set<BookImage> images = returnBook.getImages();
+			for(BookImage b:images) {
+			String name = b.getName();
+			s3client.deleteObject(s3, name);
+			}
 			long timeStart = System.currentTimeMillis();
 			Book books = bookDao.save(returnBook);
 			long timeEnd = System.currentTimeMillis();
