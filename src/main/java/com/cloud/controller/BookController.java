@@ -42,7 +42,7 @@ public class BookController {
 	private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
 @PostMapping("/addBook")
-	public ResponseEntity<List<BookImage>> save(@RequestBody BookRequest request) {
+	public ResponseEntity<Book> save(@RequestBody BookRequest request) {
 	
 		stats.incrementCounter("endpoint.book.bookSave.http.post");
 		long statsStart = System.currentTimeMillis();
@@ -59,12 +59,12 @@ public class BookController {
 				long statsEnd = System.currentTimeMillis();
 				long duration = (statsEnd - statsStart);
 				stats.recordExecutionTime("SaveBookApiCall",duration);
-				return ResponseEntity.ok(images);
+				return ResponseEntity.ok(book);
 			}else {
 				long statsEnd = System.currentTimeMillis();
 				long duration = (statsEnd - statsStart);
 				stats.recordExecutionTime("SaveBookApiCall",duration);
-				return ResponseEntity.ok(images);
+				return ResponseEntity.ok(book);
 			}
 			
 		}else {
