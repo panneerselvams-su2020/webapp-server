@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cloud.service.ResetPasswordImpl;
 import com.cloud.service.UserServiceImpl;
 import com.timgroup.statsd.StatsDClient;
 import com.cloud.model.Password;
@@ -24,6 +25,8 @@ public class UserController {
 	
 	@Autowired
 	private UserServiceImpl  userService;
+	
+	@Autowired ResetPasswordImpl resetService;
 	
 	@Autowired
 	private StatsDClient stats;
@@ -142,5 +145,20 @@ public class UserController {
 
 	        	 return ResponseEntity.ok(response);
 
+	}
+	
+	@PostMapping(path="/resetPassword")
+	public ResponseEntity<Object> resetPassword (@RequestBody User userObj){
+		stats.incrementCounter("POST /resetPassword");
+		
+		String user = userObj.getUserName();
+		User userReset = userService.getUser(user);
+		if(userReset!=null) {
+			return resetService.sendResetEmail(user);
+		}else {
+			return ResponseEntity.ok(userObj);
+	}
+		
+		
 	}
 }
