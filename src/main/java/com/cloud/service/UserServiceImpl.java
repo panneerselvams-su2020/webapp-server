@@ -154,6 +154,16 @@ public class UserServiceImpl implements UserDetailsService {
 		logger.error("passwords dont match in update");
 		return null;
 	}
+
+	public User getUser(String user) {
+		User use = userDao.findByUsername(user);
+		if(use != null) {
+			return use;
+		}
+		else {
+			return null;
+		}
+	}
 	
 
 }
