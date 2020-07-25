@@ -156,7 +156,7 @@ public class UserController {
 		if(userReset!=null) {
 			return resetService.sendResetEmail(user);
 		}else {
-			return ResponseEntity.ok(userObj);
+			return ResponseEntity.ok(userReset);
 	}
 		
 		
